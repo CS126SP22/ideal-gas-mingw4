@@ -12,6 +12,10 @@ namespace idealgas {
  */
 class GasContainer {
     public:
+        /**
+         * Constructs a defualt new container with width of 200 and height of 100.
+         */
+        GasContainer();
 
         /**
          * Constructs a new container with specified length and height.

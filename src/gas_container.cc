@@ -4,6 +4,12 @@ namespace idealgas {
 
 using glm::vec2;
 
+GasContainer::GasContainer() {
+    frame_ = 0;
+    this->width_ = 200;
+    this->height_ = 100;
+}
+
 GasContainer::GasContainer(double width, double height) {
     frame_ = 0;
     this->width_ = width;
