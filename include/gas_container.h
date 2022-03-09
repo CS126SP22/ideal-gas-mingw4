@@ -11,29 +11,31 @@ namespace idealgas {
  * stores all of the particles and updates them on each frame of the simulation.
  */
 class GasContainer {
- public:
-  /**
-   * TODO: Add more parameters to this constructor, and add documentation.
-   */
-  GasContainer();
+    public:
+        /**
+         * Constructs a new container with specified length and height.
+         * The frame of the new container is initialized to 0.
+         * @param length The specified length of the container.
+         * @param height The specified height of the container.
+         */
+         GasContainer(double width, double height);
 
-  /**
-   * Displays the container walls and the current positions of the particles.
-   */
-  void Display() const;
+        /**
+         * Displays the container walls and the current positions of the particles.
+         */
+         void Display() const;
 
-  /**
-   * Updates the positions and velocities of all particles (based on the rules
-   * described in the assignment documentation).
-   */
-  void AdvanceOneFrame();
+        /**
+         * Updates the positions and velocities of all particles (based on the rules
+         * described in the assignment documentation).
+         */
+         void AdvanceOneFrame();
 
- private:
-  /**
-   * This variable is just for the purposes of demonstrating how to make a shape move
-   * across a screen. Please remove it once you start working on your code.
-   */
-  int dummy_variable_ = 0;
+    private:
+        size_t frame_;                  /*< Frame of the container */
+        double width_;                  /*< Width of the container */
+        double height_;                 /*< Height of the container */
 };
+
 
 }  // namespace idealgas
