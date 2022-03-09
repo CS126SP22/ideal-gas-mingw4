@@ -18,6 +18,19 @@ void GasContainer::Display() const {
   ci::gl::drawStrokedRect(ci::Rectf(vec2(100, 100), vec2(600, 400)));
 }
 
+size_t GasContainer::getFrame() {
+    return this->frame_;
+}
+
+double GasContainer::getHeight() {
+    return this->height_;
+}
+
+double GasContainer::getWidth() {
+    return this->width_;
+}
+
+
 void GasContainer::AdvanceOneFrame() {
   ++frame_;
 }

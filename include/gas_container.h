@@ -12,6 +12,7 @@ namespace idealgas {
  */
 class GasContainer {
     public:
+
         /**
          * Constructs a new container with specified length and height.
          * The frame of the new container is initialized to 0.
@@ -19,6 +20,24 @@ class GasContainer {
          * @param height The specified height of the container.
          */
          GasContainer(double width, double height);
+
+         /**
+          * Gets the frame of the container.
+          * @return The frame of the container.
+          */
+         size_t getFrame();
+
+         /**
+          * Gets the width of the container.
+          * @return The width of the container.
+          */
+         double getWidth();
+
+         /**
+          * Gets the height of the container.
+          * @return The height of the container.
+          */
+         double getHeight();
 
         /**
          * Displays the container walls and the current positions of the particles.
