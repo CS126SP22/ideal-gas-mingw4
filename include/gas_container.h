@@ -1,6 +1,9 @@
 #pragma once
 
+#include <vector>
+
 #include "cinder/gl/gl.h"
+#include "particle.h"
 
 using glm::vec2;
 
@@ -58,7 +61,9 @@ class GasContainer {
         size_t frame_;                  /*< Frame of the container */
         double width_;                  /*< Width of the container */
         double height_;                 /*< Height of the container */
+        std::vector<Particle>;
 };
+
 
 
 }  // namespace idealgas
