@@ -57,11 +57,17 @@ class GasContainer {
          */
          void AdvanceOneFrame();
 
+         /**
+          * Add a particle to the gas container.
+          * @param particle The particle to add to the gas container.
+          */
+         void AddParticle(Particle const &particle);
+
     private:
-        size_t frame_;                  /*< Frame of the container */
-        double width_;                  /*< Width of the container */
-        double height_;                 /*< Height of the container */
-        std::vector<Particle>;
+        size_t frame_;                      /*< Frame of the container */
+        double width_;                      /*< Width of the container */
+        double height_;                     /*< Height of the container */
+        std::vector<Particle> particles_;   /*< Vector of particles */
 };
 
 
