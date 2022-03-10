@@ -17,8 +17,8 @@ namespace idealgas {
              */
         Particle(const vec2 &position, const vec2 &velocity, double radius);
 
-    private:
-        void CollideWithWalls();
-        void CollideWithParticles();
+        glm::vec2 position_;
+        glm::vec2 velocity_;
+        double radius_;
     };
 }  // namespace idealgas
