@@ -15,6 +15,7 @@ namespace idealgas {
  */
 class GasContainer {
     public:
+        std::vector<Particle> particles_;   /*< Vector of particles */
         /**
          * Constructs a defualt new container with width of 200 and height of 100.
          */
@@ -63,11 +64,16 @@ class GasContainer {
           */
          void AddParticle(Particle const &particle);
 
+         /**
+          * Calculates the alternation of velocities and positions of all particles prior to frame advance.
+          */
+         void Calculate();
+
     private:
         size_t frame_;                      /*< Frame of the container */
         double width_;                      /*< Width of the container */
         double height_;                     /*< Height of the container */
-        std::vector<Particle> particles_;   /*< Vector of particles */
+
 };
 
 
