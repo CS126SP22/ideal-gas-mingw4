@@ -4,21 +4,20 @@
 
 using idealgas::GasContainer;
 
-TEST_CASE("Placeholder test") {
-  GasContainer container;
-  container.AdvanceOneFrame();
-  REQUIRE(1 > 0);
+TEST_CASE("Constructor Test") {
+    SECTION("Frame is correctly initialized.") {
+        REQUIRE(GasContainer(200, 100).getFrame() == 0);
+    }
+    SECTION("Width is correctly initialized.") {
+        REQUIRE(GasContainer(300, 200).getWidth() == 300);
+    }
+    SECTION("Height is correctly initialized.") {
+        REQUIRE(GasContainer(200, 100).getHeight() == 100);
+    }
 }
 
-/*
-TODO: Rename this test file. You'll also need to modify CMakeLists.txt.
-
-You can (and should) create more test files; this project is too big
-for all tests to be in the same file. Remember that, for each file (foo.cc)
-containing non-trivial code, you should have a corresponding test file
-(foo_test.cc)
-
-Make sure to add any files that you create to CMakeLists.txt.
-
-TODO Delete this comment and the placeholder test before submitting your code.
-*/
+TEST_CASE("AdvanceOneFrame Test") {
+    GasContainer container(200, 100);
+    container.AdvanceOneFrame();
+    REQUIRE(container.getFrame() == 1);
+}

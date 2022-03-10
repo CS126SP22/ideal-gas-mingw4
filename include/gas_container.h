@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "cinder/gl/gl.h"
+#include "cinder"
 #include "particle.h"
 
 using glm::vec2;
