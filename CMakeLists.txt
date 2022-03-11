@@ -36,11 +36,17 @@ FetchContent_Declare(
     GIT_TAG v2.x
 )
 
+
+# find_package(PkgConfig REQUIRED)
+# pkg_check_modules(JSONCPP jsoncpp)
+# link_libraries(${JSONCPP_LIBRARIES})
+
+
 # Adds Catch2 testing library
 FetchContent_GetProperties(catch2)
 if(NOT catch2_POPULATED)
     FetchContent_Populate(catch2)
-    add_library(catch2 INTERFACE include/particle.h src/particle.cc)
+    add_library(catch2 INTERFACE)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 
@@ -52,7 +58,11 @@ include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 list(APPEND SOURCE_FILES    src/gas_container.cc
                             src/gas_simulation_app.cc)
 
-list(APPEND TEST_FILES tests/test_gas_simulation_app.cc)
+list(APPEND TEST_FILES tests/test_HandlingCollision.cc)
+list(APPEND TEST_FILES tests/test_AdvanceOneFrame.cc)
+list(APPEND TEST_FILES tests/test_HandlingCollisionAddition.cc)
+list(APPEND TEST_FILES tests/test_HandlingCollisionEdge.cc)
+
 
 ci_make_app(
         APP_NAME        gas-simulation
@@ -72,3 +82,4 @@ ci_make_app(
 if(MSVC)
     set_property(TARGET gas-simulation-test APPEND_STRING PROPERTY LINK_FLAGS " /SUBSYSTEM:CONSOLE")
 endif()
+

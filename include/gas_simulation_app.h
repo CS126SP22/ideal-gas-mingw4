@@ -7,22 +7,24 @@
 
 namespace idealgas {
 
-    /**
+/**
  * An app for visualizing the behavior of an ideal gas.
  */
-    class IdealGasApp : public ci::app::App {
-    public:
-        IdealGasApp();
+class IdealGasApp : public ci::app::App {
+ public:
+  IdealGasApp();
 
-        void draw() override;
-        void update() override;
+  void draw() override;
+  void update() override;
+  void keyDown( ci::app::KeyEvent event ) override;
 
+  // TODO: Delete this comment. Feel free to play around with these variables
+  // provided that you can see the entire UI on your screen.
+  const int kWindowSize = 875;
+  const int kMargin = 100;
 
-        const int kWindowSize = 875;
-        const int kMargin = 100;
-
-    private:
-        GasContainer container_;
-    };
+ private:
+  GasContainer container_;
+};
 
 }  // namespace idealgas

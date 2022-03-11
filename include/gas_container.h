@@ -1,84 +1,83 @@
 #pragma once
 
-#include <vector>
-
 #include "cinder/gl/gl.h"
-#include "cinder"
-#include "particle.h"
+#include <vector>
+#include <string>
 
 using glm::vec2;
 
 namespace idealgas {
 
-    /**
+/**
  * The container in which all of the gas particles are contained. This class
  * stores all of the particles and updates them on each frame of the simulation.
  */
-    class GasContainer {
-    public:
-        std::vector<Particle> particles_;   /*< Vector of particles */
+class GasContainer {
+ public:
+  /**
+   * TODO: Add more parameters to this constructor, and add documentation.
+   */
+  GasContainer();
 
-        ci::Rectf rectangle;
-        /**
-         * Constructs a defualt new container with width of 200 and height of 100.
-         */
-        GasContainer();
+  /**
+   * Displays the container walls and the current positions of the particles.
+   */
+  void Display() const;
 
-        /**
-         * Constructs a new container with specified length and height.
-         * The frame of the new container is initialized to 0.
-         * @param length The specified length of the container.
-         * @param height The specified height of the container.
-         */
-        GasContainer(double width, double height);
+  /**
+   * Updates the positions and velocities of all particles (based on the rules
+   * described in the assignment documentation).
+   */
+  void AdvanceOneFrame();
 
-        /**
-          * Gets the frame of the container.
-          * @return The frame of the container.
-          */
-        size_t getFrame();
+  void ChangePlayspeed(int d);
 
-        /**
-          * Gets the width of the container.
-          * @return The width of the container.
-          */
-        double getWidth();
+  void SaveState();
+  void LoadState();
 
-        /**
-          * Gets the height of the container.
-          * @return The height of the container.
-          */
-        double getHeight();
+  void SaveStateSignal();
+  void LoadStateSignal();
 
-        /**
-         * Displays the container walls and the current positions of the particles.
-         */
-        void Display() const;
+  void SetPointPos(vec2 p, int i);
+  void SetPointV(vec2 v, int i);
+  void SetPointNewV(vec2 v, int i);
 
-        /**
-         * Updates the positions and velocities of all particles (based on the rules
-         * described in the assignment documentation).
-         */
-        void AdvanceOneFrame();
+  vec2 GetPointPos(int i);
+  vec2 GetPointV(int i);
+  vec2 GetPointNewV(int i);
 
-        /**
-          * Add a particle to the gas container.
-          * @param particle The particle to add to the gas container.
-          */
-        void AddParticle(Particle const &particle);
+  void SetPointSize(float s, int i);
+  void SetPointNum(int n);
 
-        /**
-          * Calculates the alternation of velocities and positions of all particles prior to frame advance.
-          */
-        void Calculate();
+ private:
+  /**
+   * This variable is just for the purposes of demonstrating how to make a shape move
+   * across a screen. Please remove it once you start working on your code.
+   */
 
-    private:
-        size_t frame_;                      /*< Frame of the container */
-        double width_;                      /*< Width of the container */
-        double height_;                     /*< Height of the container */
+  void HandlingCollisionsAllPoints();
+  void HandlingCollisionsAllPoints_Efficient();
+  void HandlingCollision(int i, int j);
 
-    };
+  int points_num = 50;
 
+  std::string points_color = "orange";
+  std::vector<vec2> points_position;
+  std::vector<float> points_size;
+  std::vector<vec2> points_velocity;
 
+  std::vector<bool> points_velocity_changed;
+  std::vector<vec2> points_new_velocity;
+
+  vec2 box_top_left = vec2(100, 100);
+  vec2 box_bottom_right = vec2(600, 400);
+
+  float play_speed = 1.0f;
+  float play_speed_signal = 1.0f;
+  int default_point_size = 10;
+
+  bool save_state_flag = false;
+  bool load_state_flag = false;
+};
 
 }  // namespace idealgas
