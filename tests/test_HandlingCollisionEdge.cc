@@ -23,7 +23,7 @@ TEST_CASE("HandlingCollisionEdge test") {
   REQUIRE(cmpf(new_v_0.y, 1.0f));
 
 
-  container.SetPointPos(vec2(599, 399), 0);
+  container.SetPointPos(vec2(599, 599), 0);
   container.SetPointV(vec2(1, 1), 0);
   container.SetPointSize(2.0, 0);
 

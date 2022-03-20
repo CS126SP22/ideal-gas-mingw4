@@ -33,6 +33,23 @@ void IdealGasApp::keyDown( ci::app::KeyEvent event ) {
 
 }
 
+void IdealGasApp::mouseMove( ci::app::MouseEvent event ) {
+
+  vec2 p = event.getPos();
+
+  if (p.x > 100 && p.x < 340 && p.y > 650 && p.y < 780) {
+    container_.SetHoverEffect(true, 0);
+  } else if (p.x > 340 && p.x < 580 && p.y > 650 && p.y < 780) {
+    container_.SetHoverEffect(true, 1);
+  } else if (p.x > 580 && p.x < 820 && p.y > 650 && p.y < 780) {
+    container_.SetHoverEffect(true, 2);
+  } else {
+    container_.SetHoverEffect(false, -1);
+  }
+
+}
+
+
 void IdealGasApp::update() {
   container_.AdvanceOneFrame();
 }
