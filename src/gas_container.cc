@@ -1,23 +1,314 @@
 #include "gas_container.h"
+#include <random>
+#include <iostream>
+#include <ctime>
+#include <string>
+#include <fstream>
+// #include <jsoncpp/json/json.h>
+#include <numeric>
+#include <algorithm>
 
 namespace idealgas {
 
 using glm::vec2;
 
+std::vector<size_t> sort_indexes(const std::vector<vec2> &v) {
+
+  // initialize original index locations
+  std::vector<size_t> idx(v.size());
+  std::iota(idx.begin(), idx.end(), 0);
+
+  // sort indexes based on comparing values in v
+  // using std::stable_sort instead of std::sort
+  // to avoid unnecessary index re-orderings
+  // when v contains elements of equal values 
+  std::stable_sort(idx.begin(), idx.end(),
+       [&v](size_t i1, size_t i2) {return v[i1].x < v[i2].x;});
+
+  return idx;
+}
+
+
 GasContainer::GasContainer() {
 
+  // std::string config_file = "config.json";
+  // std::ifstream ifs(config_file);
+  // Json::Reader reader;
+  // Json::Value obj;
+  // reader.parse(ifs, obj);
+
+  // int ps = obj["points_size"].asInt();
+  // points_num = obj["points_num"].asInt();
+  // points_color = obj["color"].asString();
+
+  // std::cout << "points_num: " << points_num << std::endl;
+  // std::cout << "ps: " << ps << std::endl;
+  // std::cout << "points_color: " << points_color << std::endl;
+
+  std::srand( ( unsigned int )std::time( nullptr ) );
+
+  for (int i = 0; i < points_num; ++i) {
+    points_position.push_back(vec2(
+      101.0 + std::rand() % ( 600 - 101 ),
+      101.0 + std::rand() % ( 400 - 101 )
+    ));
+
+    float vx = -5.0 + std::rand() % ( 11 );
+    float vy = -5.0 + std::rand() % ( 11 );
+    points_velocity.push_back(vec2( vx / 5.0, vy / 5.0 ));
+    // std::cout << points_velocity[i].x << " " << points_velocity[i].y << std::endl;
+
+    // points_size.push_back(ps);
+    points_size.push_back(default_point_size);
+
+    points_velocity_changed.push_back(false);
+    points_new_velocity.push_back(vec2( 0, 0 ));
+  }
 }
 
 void GasContainer::Display() const {
   // This function has a lot of magic numbers; be sure to design your code in a way that avoids this.
-  ci::gl::color(ci::Color("orange"));
-  ci::gl::drawSolidCircle(vec2(dummy_variable_, 200), 10);
+  ci::gl::color(ci::Color(points_color.c_str()));
+
+  for (int i = 0; i < points_num; ++i) {
+    ci::gl::drawSolidCircle(points_position[i], points_size[i]);
+  }
+
   ci::gl::color(ci::Color("white"));
-  ci::gl::drawStrokedRect(ci::Rectf(vec2(100, 100), vec2(600, 400)));
+  ci::gl::drawStrokedRect(ci::Rectf(box_top_left, box_bottom_right));
+}
+
+void GasContainer::HandlingCollisionsAllPoints() {
+
+  for (int i = 0; i < points_num; ++i) {
+    for (int j = 0; j < points_num; ++ j) {
+      if (i > j)
+        HandlingCollision(i, j);
+    }
+  }
+
+  for (int i = 0; i < points_num; ++i) {
+    if (points_velocity_changed[i]) {
+      points_velocity[i] = points_new_velocity[i];
+    }
+  }
+}
+
+
+void GasContainer::HandlingCollisionsAllPoints_Efficient() {
+
+  int max_point_size = 0;
+  for (int i = 0; i < points_num; ++i ) {
+    max_point_size = max_point_size < points_size[i] ? points_size[i] : max_point_size;
+  }
+
+  std::vector<vec2> new_points_position;
+
+  for (int i = 0; i < points_num; ++i) {
+    new_points_position.push_back(points_position[i] + points_velocity[i] * play_speed);
+  }
+
+  std::vector<size_t> points_sorted_idx = sort_indexes(new_points_position);
+
+  for (int k = 0; k < points_num; ++k) {
+    int i = points_sorted_idx[k];
+    for (int w = k+1; w < points_num; ++w) {
+      int j = points_sorted_idx[w];
+      if (new_points_position[j].x - new_points_position[i].x < max_point_size * 2) {
+        HandlingCollision(i, j);
+      } else {
+        break;
+      }
+    }
+  }
+
+  for (int i = 0; i < points_num; ++i) {
+    if (points_velocity_changed[i]) {
+      points_velocity[i] = points_new_velocity[i];
+    }
+  }
+
+}
+
+
+void GasContainer::HandlingCollision(int i, int j) {
+  vec2 pos_i = points_position[i];
+  vec2 pos_j = points_position[j];
+  vec2 v_i = points_velocity[i];
+  vec2 v_j = points_velocity[j];
+  float s_i = points_size[i];
+  float s_j = points_size[j];
+
+  vec2 new_pos_i = pos_i + v_i * play_speed;
+  vec2 new_pos_j = pos_j + v_j * play_speed;
+
+  if ( glm::dot (new_pos_i - new_pos_j, v_i - v_j) > 0 )
+    return;
+
+  if (glm::length(new_pos_i - new_pos_j) <= s_i + s_j) {
+    vec2 new_v_i = v_i - glm::dot(v_i - v_j, pos_i - pos_j) * (pos_i - pos_j) / (glm::length(pos_i - pos_j) * glm::length(pos_i - pos_j));
+    vec2 new_v_j = v_j - glm::dot(v_j - v_i, pos_j - pos_i) * (pos_j - pos_i) / (glm::length(pos_j - pos_i) * glm::length(pos_j - pos_i));
+
+    points_new_velocity[i] = new_v_i;
+    points_new_velocity[j] = new_v_j;
+
+    points_velocity_changed[i] = true;
+    points_velocity_changed[j] = true;
+
+  }
 }
 
 void GasContainer::AdvanceOneFrame() {
-  ++dummy_variable_;
+
+  if (play_speed_signal != play_speed) {
+    play_speed = play_speed_signal;
+  }
+
+  // HandlingCollisionsAllPoints();
+  HandlingCollisionsAllPoints_Efficient();
+
+  for (int i = 0; i < points_num; ++i) {
+    // points_position[i] = points_position[i] + points_velocity[i];
+    vec2 new_pos = points_position[i] + points_velocity[i] * play_speed;
+    vec2 new_v = points_velocity[i];
+    float p_size = points_size[i];
+
+    if (new_pos.x - p_size < box_top_left.x && new_v.x < 0) {
+      new_pos.x = box_top_left.x + p_size;
+      new_v.x = -new_v.x;
+    } else if (new_pos.x + p_size > box_bottom_right.x && new_v.x > 0) {
+      new_pos.x = box_bottom_right.x - p_size;
+      new_v.x = -new_v.x;
+    }
+
+    if (new_pos.y - p_size < box_top_left.y && new_v.y < 0) {
+      new_pos.y = box_top_left.y + p_size;
+      new_v.y = -new_v.y;
+    } else if (new_pos.y + p_size > box_bottom_right.y && new_v.y > 0) {
+      new_pos.y = box_bottom_right.y - p_size;
+      new_v.y = -new_v.y;
+    }
+
+    points_position[i] = new_pos;
+    points_velocity[i] = new_v;
+
+  }
+
+  for (int i = 0; i < points_num; ++i) {
+    points_velocity_changed[i] = false;
+  }
+
+  if (save_state_flag) {
+    SaveState();
+    save_state_flag = false;
+  }
+
+  if (load_state_flag) {
+    LoadState();
+    load_state_flag = false;
+  }
+
 }
+
+void GasContainer::ChangePlayspeed (int d) {
+  if (d == -1) {
+    play_speed_signal *= 0.9;
+  } else if (d == 1) {
+    play_speed_signal /= 0.9;
+  }
+}
+
+
+void GasContainer::SaveState () {
+  std::ofstream ofs("state.bin");
+
+  ofs << points_num << std::endl;
+  ofs << points_size[0] << std::endl;
+  ofs << points_color << std::endl;
+
+  for (int i = 0; i < points_num; ++i) {
+    ofs << points_position[i].x << " " << points_position[i].y << std::endl;
+  }
+
+  for (int i = 0; i < points_num; ++i) {
+    ofs << points_velocity[i].x << " " << points_velocity[i].y << std::endl;
+  }
+
+  ofs.close();
+}
+
+void GasContainer::LoadState () {
+
+  std::ifstream ifs("state.bin");
+
+  ifs >> points_num;
+  int ps;
+  ifs >> ps;
+
+  for (int i = 0; i < points_num; ++i) {
+    points_size[i] = ps;
+  }
+
+  ifs >> points_color;
+
+  for (int i = 0; i < points_num; ++i) {
+    float x, y;
+    ifs >> x >> y;
+    points_position[i] = vec2(x, y);
+  }
+
+  for (int i = 0; i < points_num; ++i) {
+    float x, y;
+    ifs >> x >> y;
+    points_velocity[i] = vec2(x, y);
+  }
+
+  ifs.close();
+
+}
+
+void GasContainer::SaveStateSignal () {
+  save_state_flag = true;
+}
+
+void GasContainer::LoadStateSignal () {
+  load_state_flag = true;
+}
+
+
+void GasContainer::SetPointSize (float s, int i) {
+  points_size[i] = s;
+}
+
+void GasContainer::SetPointNum (int n) {
+  points_num = n;
+}
+
+
+void GasContainer::SetPointPos (vec2 p, int i) {
+  points_position[i] = p;
+}
+
+void GasContainer::SetPointV (vec2 p, int i) {
+  points_velocity[i] = p;
+}
+
+void GasContainer::SetPointNewV (vec2 p, int i) {
+  points_new_velocity[i] = p;
+}
+
+vec2 GasContainer::GetPointPos(int i){
+  return points_position[i];
+}
+
+vec2 GasContainer::GetPointV(int i){
+  return points_velocity[i];
+}
+
+vec2 GasContainer::GetPointNewV(int i){
+  return points_new_velocity[i];
+}
+
+
 
 }  // namespace idealgas

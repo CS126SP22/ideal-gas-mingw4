@@ -16,6 +16,7 @@ class IdealGasApp : public ci::app::App {
 
   void draw() override;
   void update() override;
+  void keyDown( ci::app::KeyEvent event ) override;
 
   // TODO: Delete this comment. Feel free to play around with these variables
   // provided that you can see the entire UI on your screen.

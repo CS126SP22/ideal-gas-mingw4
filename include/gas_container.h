@@ -1,6 +1,8 @@
 #pragma once
 
 #include "cinder/gl/gl.h"
+#include <vector>
+#include <string>
 
 using glm::vec2;
 
@@ -28,12 +30,54 @@ class GasContainer {
    */
   void AdvanceOneFrame();
 
+  void ChangePlayspeed(int d);
+
+  void SaveState();
+  void LoadState();
+
+  void SaveStateSignal();
+  void LoadStateSignal();
+
+  void SetPointPos(vec2 p, int i);
+  void SetPointV(vec2 v, int i);
+  void SetPointNewV(vec2 v, int i);
+
+  vec2 GetPointPos(int i);
+  vec2 GetPointV(int i);
+  vec2 GetPointNewV(int i);
+
+  void SetPointSize(float s, int i);
+  void SetPointNum(int n);
+
  private:
   /**
    * This variable is just for the purposes of demonstrating how to make a shape move
    * across a screen. Please remove it once you start working on your code.
    */
-  int dummy_variable_ = 0;
+
+  void HandlingCollisionsAllPoints();
+  void HandlingCollisionsAllPoints_Efficient();
+  void HandlingCollision(int i, int j);
+
+  int points_num = 50;
+
+  std::string points_color = "orange";
+  std::vector<vec2> points_position;
+  std::vector<float> points_size;
+  std::vector<vec2> points_velocity;
+
+  std::vector<bool> points_velocity_changed;
+  std::vector<vec2> points_new_velocity;
+
+  vec2 box_top_left = vec2(100, 100);
+  vec2 box_bottom_right = vec2(600, 400);
+
+  float play_speed = 1.0f;
+  float play_speed_signal = 1.0f;
+  int default_point_size = 10;
+
+  bool save_state_flag = false;
+  bool load_state_flag = false;
 };
 
 }  // namespace idealgas
