@@ -9,27 +9,27 @@ using idealgas::GasContainer;
 TEST_CASE("HandlingCollisionEdge test") {
   GasContainer container;
 
-  container.SetPointNum(1);
+  container.SetParticlesNum(1);
 
-  container.SetPointPos(vec2(101, 101), 0);
-  container.SetPointV(vec2(-1, -1), 0);
-  container.SetPointSize(2.0, 0);
+  container.SetParticlesPos(vec2(101, 101), 0);
+  container.SetParticlesVelocity(vec2(-1, -1), 0);
+  container.SetParticlesSize(2.0, 0);
 
   container.AdvanceOneFrame();
 
-  vec2 new_v_0 = container.GetPointV(0);
+  vec2 new_v_0 = container.GetParticlesVelocity(0);
 
   REQUIRE(cmpf(new_v_0.x, 1.0f));
   REQUIRE(cmpf(new_v_0.y, 1.0f));
 
 
-  container.SetPointPos(vec2(599, 599), 0);
-  container.SetPointV(vec2(1, 1), 0);
-  container.SetPointSize(2.0, 0);
+  container.SetParticlesPos(vec2(599, 599), 0);
+  container.SetParticlesVelocity(vec2(1, 1), 0);
+  container.SetParticlesSize(2.0, 0);
 
   container.AdvanceOneFrame();
 
-  new_v_0 = container.GetPointV(0);
+  new_v_0 = container.GetParticlesVelocity(0);
 
   REQUIRE(cmpf(new_v_0.x, -1.0f));
   REQUIRE(cmpf(new_v_0.y, -1.0f));

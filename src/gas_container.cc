@@ -422,40 +422,40 @@ void GasContainer::LoadStateSignal () {
 }
 
 
-void GasContainer::SetPointSize (float s, int i) {
+void GasContainer::SetParticlesSize (float s, int i) {
   particles_radii_[i] = s;
 }
 
-void GasContainer::SetPointMass(float m, int i) {
+void GasContainer::SetParticlesMass(float m, int i) {
     particles_masses_[i] = m;
 }
 
-void GasContainer::SetPointNum (int n) {
+void GasContainer::SetParticlesNum (int n) {
   particles_num_ = n;
 }
 
 
-void GasContainer::SetPointPos (vec2 p, int i) {
+void GasContainer::SetParticlesPos (vec2 p, int i) {
   particles_positions_[i] = p;
 }
 
-void GasContainer::SetPointV (vec2 p, int i) {
+void GasContainer::SetParticlesVelocity (vec2 p, int i) {
   particles_velocities_[i] = p;
 }
 
-void GasContainer::SetPointNewV (vec2 p, int i) {
+void GasContainer::SetParticlesNewVelocity (vec2 p, int i) {
   particles_new_velocities_[i] = p;
 }
 
-vec2 GasContainer::GetPointPos(int i){
+vec2 GasContainer::GetParticlesPos(int i){
   return particles_positions_[i];
 }
 
-vec2 GasContainer::GetPointV(int i){
+vec2 GasContainer::GetParticlesVelocity(int i){
   return particles_velocities_[i];
 }
 
-vec2 GasContainer::GetPointNewV(int i){
+vec2 GasContainer::GetParticlesNewVelocity(int i){
   return particles_new_velocities_[i];
 }
 

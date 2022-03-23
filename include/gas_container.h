@@ -73,19 +73,19 @@ class GasContainer {
   void LoadStateSignal();
 
   //Setters for particles' positions, velocities, and new velocities.
-  void SetPointPos(vec2 p, int i);
-  void SetPointV(vec2 v, int i);
-  void SetPointNewV(vec2 v, int i);
+  void SetParticlesPos(vec2 p, int i);
+  void SetParticlesVelocity(vec2 v, int i);
+  void SetParticlesNewVelocity(vec2 v, int i);
 
   //Getters for particles' positions, velocities, and enw velocities.
-  vec2 GetPointPos(int i);
-  vec2 GetPointV(int i);
-  vec2 GetPointNewV(int i);
+  vec2 GetParticlesPos(int i);
+  vec2 GetParticlesVelocity(int i);
+  vec2 GetParticlesNewVelocity(int i);
 
   //Setters for particles' sizes, number, and hovereffect.
-  void SetPointSize(float s, int i);
-  void SetPointMass(float m, int i);
-  void SetPointNum(int n);
+  void SetParticlesSize(float s, int i);
+  void SetParticlesMass(float m, int i);
+  void SetParticlesNum(int n);
   void SetHoverEffect(bool flag, int type);
 
  private:
