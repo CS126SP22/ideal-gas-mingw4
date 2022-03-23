@@ -88,6 +88,9 @@ class GasContainer {
   void SetParticlesNum(int n);
   void SetHoverEffect(bool flag, int type);
 
+  // Setters for boundary type.
+  void SetBoundaryType(bool _is_circle);
+
  private:
 
   //Original collision handler.

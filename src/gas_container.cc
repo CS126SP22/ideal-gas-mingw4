@@ -435,6 +435,10 @@ void GasContainer::SetParticlesNum (int n) {
 }
 
 
+void GasContainer::SetBoundaryType (bool _is_circle) {
+  is_circle_ = _is_circle;
+}
+
 void GasContainer::SetParticlesPos (vec2 p, int i) {
   particles_positions_[i] = p;
 }

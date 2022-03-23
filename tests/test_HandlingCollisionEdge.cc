@@ -10,6 +10,7 @@ TEST_CASE("HandlingCollisionEdge test") {
   GasContainer container;
 
   container.SetParticlesNum(1);
+  container.SetBoundaryType(false);
 
   container.SetParticlesPos(vec2(101, 101), 0);
   container.SetParticlesVelocity(vec2(-1, -1), 0);
@@ -23,7 +24,7 @@ TEST_CASE("HandlingCollisionEdge test") {
   REQUIRE(cmpf(new_v_0.y, 1.0f));
 
 
-  container.SetParticlesPos(vec2(599, 599), 0);
+  container.SetParticlesPos(vec2(799, 599), 0);
   container.SetParticlesVelocity(vec2(1, 1), 0);
   container.SetParticlesSize(2.0, 0);
 

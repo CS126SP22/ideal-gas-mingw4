@@ -11,13 +11,15 @@ TEST_CASE("HandlingCollision test") {
 
   container.SetParticlesNum(2);
 
-  container.SetParticlesPos(vec2(120, 120), 0);
+  container.SetParticlesPos(vec2(420, 420), 0);
   container.SetParticlesVelocity(vec2(0.1, 0.0), 0);
   container.SetParticlesSize(1.0, 0);
+  container.SetParticlesMass(1.0, 0);
 
-  container.SetParticlesPos(vec2(121.4, 121.4), 1);
+  container.SetParticlesPos(vec2(421.4, 421.4), 1);
   container.SetParticlesVelocity(vec2(-0.1, 0.0), 1);
   container.SetParticlesSize(1.0, 1);
+  container.SetParticlesMass(1.0, 1);
 
   container.AdvanceOneFrame();
 
