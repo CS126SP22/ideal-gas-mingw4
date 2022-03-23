@@ -31,25 +31,14 @@ std::vector<size_t> sort_indexes(const std::vector<vec2> &v) {
 
 GasContainer::GasContainer() {
 
-  // std::string config_file = "config.json";
-  // std::ifstream ifs(config_file);
-  // Json::Reader reader;
-  // Json::Value obj;
-  // reader.parse(ifs, obj);
-
-  // int ps = obj["points_size"].asInt();
-  // points_num = obj["points_num"].asInt();
-  // points_color = obj["color"].asString();
-
-  // std::cout << "points_num: " << points_num << std::endl;
-  // std::cout << "ps: " << ps << std::endl;
-  // std::cout << "points_color: " << points_color << std::endl;
-
   std::srand( ( unsigned int )std::time( nullptr ) );
 
   for (int i = 0; i < points_num; ++i) {
+    //Create particles
     if (is_circle) {
+      //Vector that records the top-left coordinates of the container.
       vec2 tl = circle_center - vec2(circle_r, circle_r);
+      //Vector that records the bottom-right coordinates of the container.
       vec2 br = circle_center + vec2(circle_r, circle_r);
 
       while (true) {
@@ -72,9 +61,6 @@ GasContainer::GasContainer() {
     float vx = -3.0 + std::rand() % ( 7 );
     float vy = -3.0 + std::rand() % ( 7 );
     points_velocity.push_back(vec2( vx / 3.0, vy / 3.0 ));
-    // std::cout << points_velocity[i].x << " " << points_velocity[i].y << std::endl;
-
-    // Three types of particles
 
     int __p = std::rand();
 
@@ -107,15 +93,32 @@ GasContainer::GasContainer() {
 
 }
 
+GasContainer::GasContainer(std::vector<std::string> points_color,
+                           std::vector<vec2> points_position,
+                           std::vector<float> points_size,
+                           std::vector<float> points_mass,
+                           std::vector<vec2> points_velocity,
+                           std::vector<bool> points_velocity_changed,
+                           std::vector<vec2> points_new_velocity,
+                           std::vector<std::vector<int>> points_v_distributions) {
+    this->points_color = points_color;
+    this->points_position = points_position;
+    this->points_size = points_size;
+    this->points_mass = points_mass;
+    this->points_velocity = points_velocity;
+    this->points_velocity_changed = points_velocity_changed;
+    this->points_new_velocity = points_velocity;
+    this->points_v_distributions = points_v_distributions;
+}
+
 void GasContainer::Display() const {
-  // This function has a lot of magic numbers; be sure to design your code in a way that avoids this.
-  // ci::gl::color(ci::Color(points_color.c_str()));
 
   for (int i = 0; i < points_num; ++i) {
     ci::gl::color(ci::Color(points_color[i].c_str()));
     ci::gl::drawSolidCircle(points_position[i], points_size[i]);
   }
 
+  //Display container depends on its shape.
   if (is_circle) {
     ci::gl::color(ci::Color("white"));
     ci::gl::drawStrokedCircle(circle_center, circle_r);
@@ -140,6 +143,7 @@ void GasContainer::Display() const {
   }
 
 
+  //Section for week 2 extra credit: Maker the histogram interactive (e.g. add hover effects)
   if (hover_effect_flag) {
     int type = hover_effect_type;
 
@@ -153,12 +157,10 @@ void GasContainer::Display() const {
     else if (type == 1) ci::gl::color(ci::Color("cyan"));
     else ci::gl::color(ci::Color("pink"));
 
-    float left = 310;
-    float bottom = 440;
 
     for (unsigned i = 0; i < points_v_distributions[type].size(); ++i) {
       int c = points_v_distributions[type][i];
-      ci::gl::drawSolidRect(ci::Rectf(vec2(left+i*10, bottom-c*2.0f), vec2(left+i*10+8, bottom)));
+      ci::gl::drawSolidRect(ci::Rectf(vec2(310.0f+i*10, 440.0f-c*2.0f), vec2(310.0f+i*10+8, 440.0f)));
     }
 
   }
@@ -166,6 +168,7 @@ void GasContainer::Display() const {
 
 }
 
+//
 void GasContainer::HandlingCollisionsAllPoints() {
 
   for (int i = 0; i < points_num; ++i) {
@@ -193,6 +196,7 @@ void GasContainer::HandlingCollisionsAllPoints_Efficient() {
   std::vector<vec2> new_points_position;
 
   for (int i = 0; i < points_num; ++i) {
+    //The play_speed parameter is for week1 extra credit: speed down or slow down the simulation.
     new_points_position.push_back(points_position[i] + points_velocity[i] * play_speed);
   }
 
@@ -422,6 +426,10 @@ void GasContainer::SetPointSize (float s, int i) {
   points_size[i] = s;
 }
 
+void GasContainer::SetPointMass(float m, int i) {
+    points_mass[i] = m;
+}
+
 void GasContainer::SetPointNum (int n) {
   points_num = n;
 }
@@ -492,15 +500,6 @@ void GasContainer::ComputeVelocityDistribution() {
       }
     }
   }
-
-  // for (int type = 0; type < 1; ++type) {
-  //   std::cout << "Type: " << type << ", ";
-  //   for (int j = 0; j < N; ++ j) {
-  //     std::cout << points_v_distributions[type][j] << "\t";
-  //   }
-  //   std::cout << std::endl;
-  // }
-
 }
 
 }  // namespace idealgas

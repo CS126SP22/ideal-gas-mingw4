@@ -19,8 +19,6 @@ class IdealGasApp : public ci::app::App {
   void keyDown( ci::app::KeyEvent event ) override;
   void mouseMove( ci::app::MouseEvent event ) override;
 
-  // TODO: Delete this comment. Feel free to play around with these variables
-  // provided that you can see the entire UI on your screen.
   const int kWindowSize = 900;
   const int kMargin = 100;
 
