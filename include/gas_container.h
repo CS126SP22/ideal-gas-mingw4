@@ -21,25 +21,25 @@ class GasContainer {
 
   /**
    * Constructs a gas container with parameters specified.
-   * @param points_color the color of points
-   * @param points_position the position of points
-   * @param points_size  the size of points
-   * @param points_mass  the  mass of points
-   * @param points_velocity the velocity of points
-   * @param points_velocity_changed the velocity of points changed.
-   * @param points_new_velocity  the new velocity of points
-   * @param points_v_distributions  the speed distributions of points.
+   * @param particles_color_ the color of points
+   * @param particles_positions_ the position of points
+   * @param particles_radii_  the size of points
+   * @param particles_masses_  the  mass of points
+   * @param particles_velocities_ the velocity of points
+   * @param particles_velocity_changes_ the velocity of points changed.
+   * @param particles_new_velocities_  the new velocity of points
+   * @param particles_v_distributions_  the speed distributions of points.
    */
-  GasContainer(std::vector<std::string> points_color,
-               std::vector<vec2> points_position,
-               std::vector<float> points_size,
-               std::vector<float> points_mass,
-               std::vector<vec2> points_velocity,
+  GasContainer(std::vector<std::string> particles_color_,
+               std::vector<vec2> particles_positions_,
+               std::vector<float> particles_radii_,
+               std::vector<float> particles_masses_,
+               std::vector<vec2> particles_velocities_,
 
-               std::vector<bool> points_velocity_changed,
-               std::vector<vec2> points_new_velocity,
+               std::vector<bool> particles_velocity_changes_,
+               std::vector<vec2> particles_new_velocities_,
 
-               std::vector<std::vector<int>> points_v_distributions);
+               std::vector<std::vector<int>> particles_v_distributions_);
 
 
   /**
@@ -98,35 +98,35 @@ class GasContainer {
   void HandlingCollision(int i, int j);
 
   //Variables for gas containers.
-  int points_num = 300;
-  std::vector<std::string> points_color;
-  std::vector<vec2> points_position;
-  std::vector<float> points_size;
-  std::vector<float> points_mass;
-  std::vector<vec2> points_velocity;
+  int particles_num_ = 300;
+  std::vector<std::string> particles_color_;
+  std::vector<vec2> particles_positions_;
+  std::vector<float> particles_radii_;
+  std::vector<float> particles_masses_;
+  std::vector<vec2> particles_velocities_;
 
-  std::vector<bool> points_velocity_changed;
-  std::vector<vec2> points_new_velocity;
+  std::vector<bool> particles_velocity_changes_;
+  std::vector<vec2> particles_new_velocities_;
 
-  std::vector<std::vector<int>> points_v_distributions;
+  std::vector<std::vector<int>> particles_v_distributions_;
 
-  bool is_circle = true;
+  bool is_circle_ = true;
 
-  vec2 box_top_left = vec2(100, 100);
-  vec2 box_bottom_right = vec2(800, 600);
+  vec2 box_top_left_ = vec2(100, 100);
+  vec2 box_bottom_right_ = vec2(800, 600);
 
-  vec2 circle_center = vec2(450, 350);
-  float circle_r = 300;
+  vec2 circle_center_ = vec2(450, 350);
+  float circle_radius_ = 300;
 
-  float play_speed = 1.0f;
-  float play_speed_signal = 1.0f;
-  float default_point_size = 2.5f;
+  float play_speed_ = 1.0f;
+  float play_speed_signal_ = 1.0f;
+  float default_particles_radii = 2.5f;
 
-  bool save_state_flag = false;
-  bool load_state_flag = false;
+  bool save_state_flag_ = false;
+  bool load_state_flag_ = false;
 
-  bool hover_effect_flag = false;
-  int hover_effect_type = -1;
+  bool hover_effect_flag_ = false;
+  int hover_effect_type_ = -1;
 };
 
 }  // namespace idealgas
